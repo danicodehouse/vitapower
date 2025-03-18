@@ -1,125 +1,113 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Security Code Challenge</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap">
-  <style>
-    body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(to bottom, #f0f0f0, #d6dfea);
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    color: #333;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captcha</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1E1E2E; /* Dark blue-gray background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-h1 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #0d4f8b;
-}
+        .container {
+            background-color: #2A2A40; /* Darker shade for contrast */
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            padding: 35px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
 
-p {
-    font-size: 16px;
-    margin-bottom: 30px;
-    color: #555;
-}
+        h2 {
+            color: #E0A80D; /* Golden yellow */
+            font-size: 26px;
+            margin-bottom: 18px;
+            font-weight: bold;
+        }
 
-#captcha-container {
-    width: 250px;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #0d4f8b;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
-}
+        .captcha-image {
+            display: block;
+            margin: 0 auto 18px;
+            max-width: 100%;
+            border: 3px solid #E0A80D; /* Golden yellow border */
+            padding: 8px;
+            border-radius: 6px;
+        }
 
-#captcha-form {
-    text-align: center;
-    width: 300px;
-}
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-#captcha-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #a9a9a9;
-    border-radius: 5px;
-    font-size: 18px;
-    color: #333;
-    transition: border-color 0.3s;
-}
+        label {
+            font-size: 15px;
+            color: #EEE;
+            font-weight: 600;
+        }
 
-#captcha-input:focus {
-    border-color: #0d4f8b;
-    outline: none;
-}
+        input[type="text"] {
+            padding: 10px;
+            font-size: 15px;
+            border: 2px solid #555;
+            background-color: #333;
+            color: #FFF;
+            border-radius: 5px;
+            outline: none;
+            transition: border 0.3s ease;
+        }
 
-#captcha-submit {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    background-color: #0d4f8b;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        input[type="text"]:focus {
+            border-color: #E0A80D; /* Golden yellow on focus */
+        }
 
-#captcha-submit:hover {
-    background-color: greenyellow;
-}
+        button {
+            background-color: #E0A80D; /* Golden yellow */
+            color: #1E1E2E;
+            font-size: 15px;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-#captcha-message {
-    color: red;
-    text-align: center;
-    margin-top: 10px;
-    display: none;
-}
-  </style>
+        button:hover {
+            background-color: #C48D06; /* Darker golden shade on hover */
+        }
+
+        .error-message {
+            color: #FF4C4C; /* Bright red for errors */
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <h1>보안 코드 챌린지</h1>
-  <p>당신이 인간임을 증명하려면 다음 과제를 완료하세요.</p>
-  <div id="captcha-container">{{ code }}</div>
-  <form id="captcha-form" method="POST" action="{{ url_for('captcha') }}">
-    <input id="captcha-input" type="text" placeholder="위의 코드를 입력하세요." name="code" required>
-    <input type="hidden" name="web" value="{{ request.args.get('web') }}">
-    <br>
-    <button id="captcha-submit" type="submit">제출하다</button>
-  </form>
-  <p id="captcha-message"></p>
-  <script>
-    // Check if the user's input matches the code
-    var captchaForm = document.getElementById('captcha-form');
-    var errorMessage = document.getElementById('captcha-message');
+    <div class="container">
+        <h2>Verify CAPTCHA</h2>
 
-    captchaForm.addEventListener('submit', function(event) {
-      event.preventDefault();
-      var captchaInput = document.getElementById('captcha-input');
+        <!-- Display CAPTCHA image -->
+        <img class="captcha-image" src="data:image/png;base64,{{ captcha_image }}" alt="CAPTCHA Image">
 
-      if (captchaInput.value == "{{ code }}") {
-        // Submit form
-        captchaForm.submit();
-      } else {
-        errorMessage.innerText = '죄송합니다. 입력한 코드가 올바르지 않습니다. 다시 시도해 주세요.';
-        errorMessage.style.display = 'block';
-        captchaInput.value = '';
-      }
-    });
-  </script>
+        <form method="POST" action="/">
+            <label for="code">Enter Code:</label>
+            <input type="text" id="code" name="code" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        {% if error %}
+            <p class="error-message">{{ message }}</p>
+        {% endif %}
+    </div>
 </body>
 </html>
